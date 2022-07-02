@@ -1,12 +1,11 @@
-import sys
 from sys import stdin
-
+import sys
 
 def binary_convert(number, bits):
     '''Converts a numnber into binary and masks it with "bits" bits'''
     if (number < 0):
         print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
-        sys.exit(2)
+        sys.exit()
     
     binary_n = bin(number)
 
@@ -24,11 +23,14 @@ def count_vars(line_list_0, len_list):
     vars = []
 
     if len_list == 0:
-        sys.exit(2)
+        sys.exit()
     
     line_cur = line_list_0[0].strip().split()
 
     while (line_cur[0] == "var" and i < len_list):
+        if line_cur[1] in vars:
+            print(f"\nError in line {line_address[i + offset]}:\nGeneral Syntax Error")
+            sys.exit()
         vars.append(line_cur[1])
         i += 1
         offset += 1
@@ -56,7 +58,9 @@ def first_iter(line_list_0, len_list):
         elif line_cur[0][-1] == ":":
 
             # if (line[0][-1] == ":"):
-
+            if line_cur[0][0:-1] in vars or line_cur[0][0:-1] in labels:
+                print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+                sys.exit()
             labels[line_cur[0][0:-1]] = binary_convert(address, 8)
 
             if len(line_cur) > 1:
@@ -104,60 +108,60 @@ def make_reg_dic(n):
 def typeA(line_arr,dic_type_a,reg_dic, line_address, offset, i):
     if len(line_arr) != 4:
         print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
-        sys.exit(2)
+        sys.exit()
     if line_arr[0] in dic_type_a:
         print(dic_type_a[line_arr[0]],end='')
 
     else:
         print(f"\nError in line {line_address[i + offset] + 1}:\nTypos in instruction name")
-        sys.exit(2)
+        sys.exit()
 
     print("00",end='')
 
     if line_arr[1] in reg_dic:
         if (line_arr[1] == "FLAGS"):
             print(f"\nError in line {line_address[i + offset] + 1}:\nIllegal use of FLAGS register")
-            sys.exit(2)
+            sys.exit()
         else:
             print(reg_dic[line_arr[1]],end='')
 
     else:
         print(f"\nError in line {line_address[i + offset] + 1}:\nTypos in register name")
-        sys.exit(2)
+        sys.exit()
 
     if line_arr[2] in reg_dic:
         if (line_arr[2] == "FLAGS"):
             print(f"\nError in line {line_address[i + offset] + 1}:\nIllegal use of FLAGS register")
-            sys.exit(2)
+            sys.exit()
         else:
             print(reg_dic[line_arr[2]],end='')
 
     else:
         print(f"\nError in line {line_address[i + offset] + 1}:\nTypos in register name")
-        sys.exit(2)
+        sys.exit()
     
     if line_arr[3] in reg_dic:
         if line_arr[3] == "FLAGS":
             print(f"\nError in line {line_address[i + offset] + 1}:\nIllegal use of FLAGS register")
-            sys.exit(2)
+            sys.exit()
         else:
             print(reg_dic[line_arr[3]])
 
     else:
         print(f"\nError in line {line_address[i + offset] + 1}:\nTypos in register name")
-        sys.exit(2)
+        sys.exit()
 
 def typeC(line_arr,dic_type_c,reg_dic, line_address, offset, i):
 
     if len(line_arr != 3):
         print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
-        sys.exit(2)
+        sys.exit()
     if line_arr[0] in dic_type_c:
         print(dic_type_c[line_arr[0]],end='')
 
     else:
         print("Instruction invalid")
-        sys.exit(2)
+        sys.exit()
 
     print("00000",end='')
 
@@ -166,100 +170,101 @@ def typeC(line_arr,dic_type_c,reg_dic, line_address, offset, i):
 
     else:
         print(f"\nError in line {line_address[i + offset] + 1}:\nTypos in register name")
-        sys.exit(2)
+        sys.exit()
 
     if line_arr[2] in reg_dic:
         if line_arr[2] == "FLAGS":
             print(f"\nError in line {line_address[i + offset] + 1}:\nIllegal use of FLAGS register")
-            sys.exit(2)
+            sys.exit()
         else:
             print(reg_dic[line_arr[2]],end='')
 
     else:
         print(f"\nError in line {line_address[i + offset] + 1}:\nTypos in register name")
-        sys.exit(2)
+        sys.exit()
 
 def typeB(line_arr,reg_dic,dic_type_b, line_address, offset, i):
 
     if len(line_arr) != 3:
         print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
-        sys.exit(2)
+        sys.exit()
     if line_arr[0] in dic_type_b:
         print(dic_type_b[line_arr[0]],end='')
 
     else:
         print("Instruction invalid")
-        sys.exit(2)
+        sys.exit()
     
     if line_arr[1] in reg_dic:
         if line_arr[1] == "FLAGS":
             print(f"\nError in line {line_address[i + offset] + 1}:\nIllegal use of FLAGS register")
+            sys.exit()
         print(reg_dic[line_arr[1]],end='')
 
     else:
         print(f"\nError in line {line_address[i + offset] + 1}:\nTypos in register name")
-        sys.exit(2)    
+        sys.exit()    
     
     if line_arr[2][0]=="$":
         try:
             temp = int(line_arr[2][1:])
         except:
             print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
-            sys.exit(2)
+            sys.exit()
         if (int(line_arr[2][1:]) >= 256):
             print(f"\nError in line {line_address[i + offset] + 1}:\nIllegal immediate values (more than 8 bits)")
-            sys.exit(2)
+            sys.exit()
         else:
             print(binary_convert(int(line_arr[2][1:]),8))
     
     else:
         print("Wrong syntax of immediate value")
-        sys.exit(2)
+        sys.exit()
 
 def typeD(line_arr,label_dic,dic_type_d,reg_dic, line_address, offset, i):
     if len(line_arr) != 3:
         print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
-        sys.exit(2)
+        sys.exit()
     if line_arr[0] in dic_type_d:
         print(dic_type_d[line_arr[0]],end='')
 
     else:
         print("Instruction invalid")
-        sys.exit(2)
+        sys.exit()
 
     if line_arr[1] in reg_dic:
         if (line_arr[1] == "FLAGS"):
             print(f"\nError in line {line_address[offset + i] + 1}:\nIllegal use of FLAGS register")
-            sys.exit(2)
+            sys.exit()
         else:
             print(reg_dic[line_arr[1]],end='')
 
     else:
         print(f"\nError in line {line_address[i + offset] + 1}:\nTypos in register name")
-        sys.exit(2)
+        sys.exit()
 
     if line_arr[2] in label_dic:
         print(label_dic[line_arr[2]])
     
     elif line_arr[2] in labels:
         print(f"\nError in line {line_address[i + offset] + 1}:\nMisuse of lables as variables")
-        sys.exit(2)
+        sys.exit()
     
     else:
         print(f"\nError in line {line_address[i + offset] + 1}:\nUse of undefined variables")
-        sys.exit(2)
+        sys.exit()
 
 def typeE(line_arr,label_dic,dic_type_e, line_address, offset, i):
 
     if len(line_arr) != 2:
         print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
-        sys.exit(2)
+        sys.exit()
     if line_arr[0] in dic_type_e:
         print(dic_type_e[line_arr[0]],end='')
 
     else:
         print("Instruction invalid")
-        sys.exit(2)
+        sys.exit()
 
     print("000",end='')
 
@@ -268,11 +273,11 @@ def typeE(line_arr,label_dic,dic_type_e, line_address, offset, i):
     
     elif line_arr[1] in var_dic:
         print(f"\nError in line {line_address[i + offset] + 1}:\nMisuse of variables as lables")
-        sys.exit(2)
+        sys.exit()
     
     else:
         print(f"\nError in line {line_address[i + offset] + 1}\nUse of undefined labels")
-        sys.exit(2)
+        sys.exit()
 
 def typeF():
     print("0101000000000000")
@@ -302,7 +307,7 @@ try:
     len_vars = len(vars)
 
     if i >= len_line_list_0:
-        sys.exit(2)
+        sys.exit()
 
     # print(vars)
     # print(line_list_0)
@@ -337,10 +342,13 @@ try:
     # print(line_address)
     # print(offset)
 
+    if (len_line_list + len_vars > 256):
+        print(f"\nError:\nNot enough Memory")
+
     for i in range(len_line_list):
         if (hlt == True):
             print(f"\nError in line {line_address[i + offset] + 1}:\nhlt is not the last instruction")
-            sys.exit(2)
+            sys.exit()
         if (line_list[i][0] in TypeA):
             typeA(line_list[i], TypeA, register_dic, line_address, offset, i)
         
@@ -369,23 +377,21 @@ try:
         elif (line_list[i][0] in TypeF):
             if len(line_list[i]) != 1:
                 print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
-                sys.exit(2)
+                sys.exit()
             hlt = True
             typeF()
         
         elif (line_list[i][0] == "var"):
             print(f"\nError in line {line_address[i + offset] + 1}:\nVariables not declared at the beginning")
-            sys.exit(2)
+            sys.exit()
         else:
             print(f"\nError in line {line_address[i + offset] + 1}:\nTypos in instruction name")
-            sys.exit(2)
+            sys.exit()
     if (hlt == False):
         print(f"\nError in line {line_address[i + offset] + 1}:\nMissing hlt instruction")
-        sys.exit(2)
-
+        sys.exit()
 except SystemExit:
-        sys.exit(2)
-        
+    pass
 except:
-    print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax error")
-    sys.exit(2)
+    print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+    sys.exit()
