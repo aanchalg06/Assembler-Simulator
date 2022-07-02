@@ -23,13 +23,17 @@ def count_vars(line_list_0, len_list):
     vars = []
 
     if len_list == 0:
+        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
         sys.exit()
     
     line_cur = line_list_0[0].strip().split()
 
     while (line_cur[0] == "var" and i < len_list):
+        if (len(line_cur) != 2):
+            print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+            sys.exit()
         if line_cur[1] in vars:
-            print(f"\nError in line {line_address[i + offset]}:\nGeneral Syntax Error")
+            print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
             sys.exit()
         vars.append(line_cur[1])
         i += 1
@@ -307,6 +311,7 @@ try:
     len_vars = len(vars)
 
     if i >= len_line_list_0:
+        print(f"\nError:\nMissing hlt instruction")
         sys.exit()
 
     # print(vars)
@@ -388,7 +393,7 @@ try:
             print(f"\nError in line {line_address[i + offset] + 1}:\nTypos in instruction name")
             sys.exit()
     if (hlt == False):
-        print(f"\nError in line {line_address[i + offset] + 1}:\nMissing hlt instruction")
+        print(f"\nError:\nMissing hlt instruction")
         sys.exit()
 except SystemExit:
     pass
