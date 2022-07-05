@@ -2,7 +2,7 @@ from sys import stdin
 import sys
 
 def binary_convert(number, bits):
-    '''Converts a numnber into binary and masks it with "bits" bits'''
+    '''Converts a numnber into binoary and masks it with "bits" bits'''
     if (number < 0):
         print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
         sys.exit()
@@ -157,7 +157,8 @@ def typeA(line_arr,dic_type_a,reg_dic, line_address, offset, i):
 
 def typeC(line_arr,dic_type_c,reg_dic, line_address, offset, i):
 
-    if len(line_arr != 3):
+
+    if len(line_arr) != 3:
         print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
         sys.exit()
     if line_arr[0] in dic_type_c:
@@ -175,13 +176,14 @@ def typeC(line_arr,dic_type_c,reg_dic, line_address, offset, i):
     else:
         print(f"\nError in line {line_address[i + offset] + 1}:\nTypos in register name")
         sys.exit()
+    
 
     if line_arr[2] in reg_dic:
         if line_arr[2] == "FLAGS":
             print(f"\nError in line {line_address[i + offset] + 1}:\nIllegal use of FLAGS register")
             sys.exit()
         else:
-            print(reg_dic[line_arr[2]],end='')
+            print(reg_dic[line_arr[2]])
 
     else:
         print(f"\nError in line {line_address[i + offset] + 1}:\nTypos in register name")
