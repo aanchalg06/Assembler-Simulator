@@ -35,6 +35,9 @@ def count_vars(line_list_0, len_list):
         if line_cur[1] in vars:
             print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
             sys.exit()
+        if line_cur[1].isidentifier() == False:
+            print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+            sys.exit()
         vars.append(line_cur[1])
         i += 1
         offset += 1
@@ -65,6 +68,11 @@ def first_iter(line_list_0, len_list):
             if line_cur[0][0:-1] in vars or line_cur[0][0:-1] in labels:
                 print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
                 sys.exit()
+            
+            if line_cur[0][0:-1].isidentifier() == False:
+                print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+                sys.exit()
+            
             labels[line_cur[0][0:-1]] = binary_convert(address, 8)
 
             if len(line_cur) > 1:
@@ -403,5 +411,3 @@ except SystemExit:
 except:
     print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
     sys.exit()
-
-#C:\Users\adish\OneDrive\Desktop\desktop\CSE112-22-Assignment-SimpleAssemblerSimulator-main\CSE112-22-Assignment-SimpleAssemblerSimulator-main\Assembler-Simulator_4_Simple_RISC\Simple-Assembler\SimpleAssembler.py
