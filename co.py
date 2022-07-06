@@ -14,7 +14,7 @@ def binary_convert(number, bits):
         return "0" * (bits - len(binary_n) + 2) + binary_n[2:]
 
     else:
-        return binary_n[2:10]
+        return binary_n[-8:]
 
 def count_vars(line_list_0, len_list):
     """Counts the number of variables"""
