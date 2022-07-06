@@ -351,6 +351,7 @@ try:
 
     if (len_line_list + len_vars > 256):
         print(f"\nError:\nNot enough Memory")
+        sys.exit()
 
     for i in range(len_line_list):
         if (hlt == True):
@@ -402,3 +403,5 @@ except SystemExit:
 except:
     print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
     sys.exit()
+
+#C:\Users\adish\OneDrive\Desktop\desktop\CSE112-22-Assignment-SimpleAssemblerSimulator-main\CSE112-22-Assignment-SimpleAssemblerSimulator-main\Assembler-Simulator_4_Simple_RISC\Simple-Assembler\SimpleAssembler.py
