@@ -540,3 +540,4 @@ while not(halted):
     PC = "0" * (8 - len(d_b(pc))) + d_b(pc)
 
 mem_dump(memory)
+
