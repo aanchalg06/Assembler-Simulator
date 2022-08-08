@@ -260,3 +260,5 @@ elif (q_type==2):
             ans=ans-30
             ans=2**ans
             print(ans,"GB")
+
+            
