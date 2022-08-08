@@ -35,8 +35,7 @@ if (q_type==1):
         b_opcode=int(L_inst-(L_reg+power))
         b_filler=L_inst-((2*L_reg)+b_opcode)
         max_inst=2**b_opcode
-        max_reg=2**(L_reg-1)
-
+        max_reg=(2**L_reg)
         print("Minimum bits needed to represent an address in this architecture : ",power)
         print("Number of bits needed by opcode :                                  ",b_opcode)
         print("Number of filler bits in Instruction type 2 :                      ",b_filler)
@@ -64,8 +63,7 @@ if (q_type==1):
         b_opcode=int(L_inst-(L_reg+power))
         b_filler=L_inst-((2*L_reg)+b_opcode)
         max_inst=2**b_opcode
-        max_reg=2**(L_reg-1)
-
+        max_reg=(2**L_reg)
         print("Minimum bits needed to represent an address in this architecture : ",power)
         print("Number of bits needed by opcode :                                  ",b_opcode)
         print("Number of filler bits in Instruction type 2 :                      ",b_filler)
@@ -93,8 +91,7 @@ if (q_type==1):
         b_opcode=int(L_inst-(L_reg+power))
         b_filler=L_inst-((2*L_reg)+b_opcode)
         max_inst=2**b_opcode
-        max_reg=2**(L_reg-1)
-
+        max_reg=(2**L_reg)
         print("Minimum bits needed to represent an address in this architecture : ",power)
         print("Number of bits needed by opcode :                                  ",b_opcode)
         print("Number of filler bits in Instruction type 2 :                      ",b_filler)
@@ -123,7 +120,7 @@ if (q_type==1):
         b_opcode=int(L_inst-(L_reg+power))
         b_filler=L_inst-((2*L_reg)+b_opcode)
         max_inst=2**b_opcode
-        max_reg=2**(L_reg-1)
+        max_reg=(2**L_reg)
 
         print("Minimum bits needed to represent an address in this architecture : ",power)
         print("Number of bits needed by opcode :                                  ",b_opcode)
@@ -235,14 +232,31 @@ elif (q_type==2):
         L_pin=int(input("No of address pins : "))
         L_mode=input("Type of addressable memory : ")
         if(L_mode=="Bit"):
-            ans=2**L_pin
-            print(ans)
+            ans=(2**L_pin)
+            ans=ans/8
+            ans=(math.ceil(Log2(int(ans))))
+            ans=ans-30
+            ans=2**ans
+            print(ans,"GB")
         elif(L_mode=="Nibble"):
             ans=(2**L_pin)*4
-            print(ans)
+            ans=ans/8
+            ans=(math.ceil(Log2(int(ans))))
+            ans=ans-30
+            ans=2**ans
+            print(ans,"GB")
         elif(L_mode=="Byte"):
             ans=(2**L_pin)*8
-            print(ans)
+            ans=ans/8
+            ans=(math.ceil(Log2(int(ans))))
+            ans=ans-30
+            ans=2**ans
+            print(ans,"GB")
+
         elif(L_mode=="Word"):
             ans=(2**L_pin)*L_cpu
-            print(ans)
+            ans=ans/8
+            ans=(math.ceil(Log2(int(ans))))
+            ans=ans-30
+            ans=2**ans
+            print(ans,"GB")
