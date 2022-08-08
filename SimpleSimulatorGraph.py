@@ -284,14 +284,19 @@ def not_0(instr):
 
     global regs
 
+    temp0 = b_d(instr[10:13])
+    temp1 = b_d(instr[13:])
+    temp2 = ""
+    assert len(regs[temp0]) == 16, "register length not 16 This is it: a" + regs[temp0] + "a and pc is: a" + str(pc) + "a"
     for i in range(16):
 
-        if regs[b_d(instr[10:13])][i] == "0":
-            regs[b_d(instr[13:])][i] = "1"
+        if regs[temp0][i] == "0":
+            temp2 += "1"
 
         else:
-            regs[b_d(instr[13:])][i] = "0"
+            temp2 += "0"
 
+    regs[temp1] = temp2
     inc_pc()
     
     return
@@ -382,8 +387,10 @@ def je(instr):
 def hlt(instr):
 
     global halted
+    global changed
 
     halted = True
+    changed = True
 
     inc_pc()
 
@@ -601,12 +608,15 @@ i = 0
 
 for line in stdin:
 
-    if line.strip() == "":
-        pass
-
-    elif len(line) != 16:
-        memory[i] = line[:-1]
+    if len(line) > 16:
+        memory[i] = line[:16]
         i += 1
+    
+    elif len(line) < 16:
+        pass
+    # if len(line) != 16:
+    #     memory[i] = line[:-1]
+    #     i += 1
     
     else:
         memory[i] = line
