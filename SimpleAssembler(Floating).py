@@ -4,7 +4,7 @@ import sys
 def binary_convert(number, bits):
     '''Converts a numnber into binoary and masks it with "bits" bits'''
     if (number < 0):
-        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_0")
         sys.exit()
     
     binary_n = bin(number)
@@ -16,6 +16,31 @@ def binary_convert(number, bits):
     else:
         return binary_n[-8:]
 
+def binary_convert_float(num):
+    temp_str = ""
+    ans = ""
+    float_f = num % 1
+    int_f = int(num)
+    while int_f >= 1:
+        temp_str = str(int_f % 2) + temp_str
+        int_f = int_f // 2
+    if (len(temp_str) >= 6):
+        if (len(temp_str) > 6):
+            for chara in temp_str[6:]:
+                if chara != "0":
+                    return '0'
+        ans = binary_convert(len(temp_str) - 1, 3) + temp_str[1:6]
+        return ans
+    temp_str = temp_str
+    exponent = len(temp_str) - 1
+    for i in range(6 - len(temp_str)):
+        temp_str = temp_str + str(int(float_f * 2))
+        float_f = float_f * 2 - int(float_f * 2)
+    if float_f != 0:
+        return '0'
+    
+    return binary_convert(exponent, 3) + temp_str[1:6]
+
 def count_vars(line_list_0, len_list):
     """Counts the number of variables"""
     global i
@@ -23,20 +48,20 @@ def count_vars(line_list_0, len_list):
     vars = []
 
     if len_list == 0:
-        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_1")
         sys.exit()
     
     line_cur = line_list_0[0].strip().split()
 
     while (line_cur[0] == "var" and i < len_list):
         if (len(line_cur) != 2):
-            print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+            print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_2")
             sys.exit()
         if line_cur[1] in vars:
-            print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+            print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_3")
             sys.exit()
-        if line_cur[1].isidentifier() == False:
-            print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+        if line_cur[1].isidentifier() == False or line_cur[1] in register_dic:
+            print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_4")
             sys.exit()
         vars.append(line_cur[1])
         i += 1
@@ -66,11 +91,11 @@ def first_iter(line_list_0, len_list):
 
             # if (line[0][-1] == ":"):
             if line_cur[0][0:-1] in vars or line_cur[0][0:-1] in labels:
-                print(f"\nError in line {line_address[i] + 1}:\nGeneral Syntax Error")
+                print(f"\nError in line {line_address[i] + 1}:\nGeneral Syntax Error_5")
                 sys.exit()
             
             if line_cur[0][0:-1].isidentifier() == False:
-                print(f"\nError in line {line_address[i] + 1}:\nGeneral Syntax Error")
+                print(f"\nError in line {line_address[i] + 1}:\nGeneral Syntax Error_6")
                 sys.exit()
             
             labels[line_cur[0][0:-1]] = binary_convert(address, 8)
@@ -120,7 +145,7 @@ def make_reg_dic(n):
 def typeA(line_arr,dic_type_a,reg_dic, line_address, offset, i):
     global ans
     if len(line_arr) != 4:
-        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_7")
         sys.exit()
     if line_arr[0] in dic_type_a:
         ans += str(dic_type_a[line_arr[0]])
@@ -169,7 +194,7 @@ def typeC(line_arr,dic_type_c,reg_dic, line_address, offset, i):
     global ans
 
     if len(line_arr) != 3:
-        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_8")
         sys.exit()
     if line_arr[0] in dic_type_c:
         ans += str(dic_type_c[line_arr[0]])
@@ -204,7 +229,7 @@ def typeB(line_arr,reg_dic,dic_type_b, line_address, offset, i):
     global ans
 
     if len(line_arr) != 3:
-        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_9")
         sys.exit()
     if line_arr[0] in dic_type_b:
         ans += str(dic_type_b[line_arr[0]])
@@ -224,16 +249,32 @@ def typeB(line_arr,reg_dic,dic_type_b, line_address, offset, i):
         sys.exit()    
     
     if line_arr[2][0]=="$":
-        try:
-            temp = int(line_arr[2][1:])
-        except:
-            print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
-            sys.exit()
-        if (int(line_arr[2][1:]) >= 256):
-            print(f"\nError in line {line_address[i + offset] + 1}:\nIllegal immediate values (more than 8 bits)")
-            sys.exit()
+        if line_arr[0] != "movf":
+            try:
+                temp = int(line_arr[2][1:])
+            except:
+                print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_10 and {line_arr[2][1:]}")
+                sys.exit()
+            if (int(line_arr[2][1:]) >= 256):
+                print(f"\nError in line {line_address[i + offset] + 1}:\nIllegal immediate values (more than 8 bits)")
+                sys.exit()
+            else:
+                ans += str(binary_convert(int(line_arr[2][1:]),8)) + "\n"
         else:
-            ans += str(binary_convert(int(line_arr[2][1:]),8)) + "\n"
+            try:
+                temp = float(line_arr[2][1:])
+                assert "." in line_arr[2][1:], f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error"
+            except:
+                print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+                sys.exit()
+            if (temp < 1 or temp >= 256):
+                print(f"\nError in line {line_address[i + offset] + 1}:\nIllegal immediate values")
+                sys.exit()
+            if len( binary_convert_float(temp) ) != 1:
+                ans += binary_convert_float(temp) + "\n"
+            else:
+                print(f"\nError in line {line_address[i + offset] + 1}:\nIllegal immediate values")
+                sys.exit()
     
     else:
         print("Wrong syntax of immediate value")
@@ -244,7 +285,7 @@ def typeD(line_arr,label_dic,dic_type_d,reg_dic, line_address, offset, i):
     global ans
     
     if len(line_arr) != 3:
-        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_11")
         sys.exit()
     if line_arr[0] in dic_type_d:
         ans += str(dic_type_d[line_arr[0]])
@@ -280,7 +321,7 @@ def typeE(line_arr,label_dic,dic_type_e, line_address, offset, i):
     global ans
 
     if len(line_arr) != 2:
-        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+        print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_12")
         sys.exit()
     if line_arr[0] in dic_type_e:
         ans += str(dic_type_e[line_arr[0]])
@@ -312,6 +353,7 @@ def typeF():
 # with open("test_text.txt", "r") as file:
 #     line_string = file.read()
 try:
+    register_dic = make_reg_dic(8)
     line_list_0 = []
     hlt = False
     line_no = 0
@@ -352,7 +394,6 @@ try:
 
     # print(var_dic)
 
-    register_dic = make_reg_dic(8)
 
     # print(register_dic)
 
@@ -405,7 +446,7 @@ try:
 
         elif (line_list[i][0] in TypeF):
             if len(line_list[i]) != 1:
-                print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+                print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_13")
                 sys.exit()
             hlt = True
             typeF()
@@ -425,7 +466,5 @@ try:
 except SystemExit:
     pass
 except:
-    print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error")
+    print(f"\nError in line {line_address[i + offset] + 1}:\nGeneral Syntax Error_14")
     sys.exit()
-    
-   
