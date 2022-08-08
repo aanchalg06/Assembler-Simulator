@@ -270,15 +270,20 @@ def and_0(instr):
 def not_0(instr):
 
     global regs
-
+    
+    temp0 = b_d(instr[10:13])
+    temp1 = b_d(instr[13:])
+    temp2 = ""
+    assert len(regs[temp0]) == 16, "register length not 16 This is it: a" + regs[temp0] + "a and pc is: a" + str(pc) + "a"
     for i in range(16):
 
-        if regs[b_d(instr[10:13])][i] == "0":
-            regs[b_d(instr[13:])][i] = "1"
+        if regs[temp0][i] == "0":
+            temp2 += "1"
 
         else:
-            regs[b_d(instr[13:])][i] = "0"
+            temp2 += "0"
 
+    regs[temp1] = temp2
     inc_pc()
     
     return
@@ -369,8 +374,10 @@ def je(instr):
 def hlt(instr):
 
     global halted
+    global changed
 
     halted = True
+    changed = True
 
     inc_pc()
 
@@ -458,7 +465,8 @@ def EE(pc):
     assert type(instr) == str, "The instruction is not a string"
     # if len(instr) != 16:
     #     print(instr)
-    assert len(instr) == 16, f"Instruction is not a string of 16 characters, instruction is a{instr}a and length of it is a{instr}"
+    # assert len(instr) == 16, f"instr a{instr}a length a{instr}"
+    assert len(instr) == 16, f"pc is a{pc}a, l_instr is a{len(instr)}a instr is a{instr}a"
 
     opcode = instr[:5]
 
@@ -585,10 +593,13 @@ i = 0
 
 for line in stdin:
 
-    if len(line) != 16:
-        memory[i] = line[:-1]
+    if len(line) > 16:
+        memory[i] = line[:16]
         i += 1
     
+    elif len(line) < 16:
+        pass
+
     else:
         memory[i] = line
         i += 1
@@ -621,4 +632,3 @@ while not(halted):
     PC = "0" * (8 - len(d_b(pc))) + d_b(pc)
 
 mem_dump(memory)
-
